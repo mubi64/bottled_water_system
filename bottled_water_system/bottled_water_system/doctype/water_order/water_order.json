@@ -1,0 +1,118 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2025-04-18 12:16:04.895145",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "customer",
+  "bottle_quantity",
+  "delivered_quantity",
+  "outstanding_quantity",
+  "consumed_from",
+  "item",
+  "status",
+  "column_break_iiho",
+  "order_date",
+  "delivery_date",
+  "remarks"
+ ],
+ "fields": [
+  {
+   "fieldname": "customer",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Customer",
+   "options": "Customer",
+   "reqd": 1
+  },
+  {
+   "fieldname": "order_date",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "label": "Order Date",
+   "reqd": 1
+  },
+  {
+   "fieldname": "delivery_date",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "label": "Delivery Date",
+   "reqd": 1
+  },
+  {
+   "fieldname": "bottle_quantity",
+   "fieldtype": "Int",
+   "in_list_view": 1,
+   "label": "Bottle Quantity",
+   "non_negative": 1,
+   "reqd": 1
+  },
+  {
+   "fieldname": "consumed_from",
+   "fieldtype": "Link",
+   "label": "Consumed From",
+   "options": "Customer Package Purchase",
+   "read_only": 1,
+   "reqd": 1
+  },
+  {
+   "fetch_from": "consumed_from.item",
+   "fieldname": "item",
+   "fieldtype": "Read Only",
+   "label": "Item"
+  },
+  {
+   "fieldname": "column_break_iiho",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "remarks",
+   "fieldtype": "Small Text",
+   "label": "Remarks"
+  },
+  {
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "label": "Status",
+   "options": "Pending\nPartially Delivered\nDelivered\nCancelled",
+   "read_only": 1
+  },
+  {
+   "fieldname": "delivered_quantity",
+   "fieldtype": "Int",
+   "label": "Delivered Quantity",
+   "read_only": 1
+  },
+  {
+   "fieldname": "outstanding_quantity",
+   "fieldtype": "Int",
+   "label": "Outstanding Quantity",
+   "read_only": 1
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2025-04-18 12:26:57.622392",
+ "modified_by": "Administrator",
+ "module": "Bottled Water System",
+ "name": "Water Order",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

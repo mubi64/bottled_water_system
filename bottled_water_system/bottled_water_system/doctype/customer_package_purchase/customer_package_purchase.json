@@ -1,0 +1,99 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "format:BWM-CPP-{MM}-{YYYY}-{#####}",
+ "creation": "2025-04-18 12:11:35.026759",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "customer",
+  "bottle_package",
+  "item",
+  "status",
+  "column_break_toyx",
+  "purchase_date",
+  "bottles_purchased",
+  "bottles_remaining"
+ ],
+ "fields": [
+  {
+   "fieldname": "customer",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Customer",
+   "options": "Customer",
+   "reqd": 1
+  },
+  {
+   "fieldname": "bottle_package",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Bottle Package",
+   "options": "Bottle Package",
+   "reqd": 1
+  },
+  {
+   "fetch_from": "bottle_package.item",
+   "fieldname": "item",
+   "fieldtype": "Read Only",
+   "label": "Item"
+  },
+  {
+   "fieldname": "column_break_toyx",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "label": "Status",
+   "options": "Active\nFully Consumed",
+   "read_only": 1
+  },
+  {
+   "fieldname": "purchase_date",
+   "fieldtype": "Date",
+   "label": "Purchase Date",
+   "reqd": 1
+  },
+  {
+   "fetch_from": "bottle_package.bottle_quantity",
+   "fieldname": "bottles_purchased",
+   "fieldtype": "Int",
+   "label": "Bottles Purchased",
+   "non_negative": 1
+  },
+  {
+   "fieldname": "bottles_remaining",
+   "fieldtype": "Int",
+   "label": "Bottles Remaining",
+   "non_negative": 1,
+   "read_only": 1
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2025-04-21 14:52:00.192296",
+ "modified_by": "Administrator",
+ "module": "Bottled Water System",
+ "name": "Customer Package Purchase",
+ "naming_rule": "Expression",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}

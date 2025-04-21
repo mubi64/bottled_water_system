@@ -1,0 +1,75 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2025-04-18 12:20:32.903830",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "customer",
+  "water_bottle_product",
+  "column_break_yutb",
+  "return_date",
+  "quantity_returned"
+ ],
+ "fields": [
+  {
+   "fieldname": "customer",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Customer",
+   "options": "Customer",
+   "reqd": 1
+  },
+  {
+   "fieldname": "water_bottle_product",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Water Bottle Product",
+   "options": "Water Bottle Product",
+   "reqd": 1
+  },
+  {
+   "fieldname": "column_break_yutb",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "return_date",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "label": "Return Date",
+   "reqd": 1
+  },
+  {
+   "fieldname": "quantity_returned",
+   "fieldtype": "Int",
+   "in_list_view": 1,
+   "label": "Quantity Returned",
+   "non_negative": 1,
+   "reqd": 1
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2025-04-18 12:22:19.709179",
+ "modified_by": "Administrator",
+ "module": "Bottled Water System",
+ "name": "Bottle Return",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}
