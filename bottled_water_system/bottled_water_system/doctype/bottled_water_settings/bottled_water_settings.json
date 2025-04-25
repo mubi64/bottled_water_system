@@ -8,7 +8,10 @@
   "award_bottle_to_new_users",
   "award_bottle_quantity",
   "award_bottle_product",
-  "column_break_uacb"
+  "column_break_uacb",
+  "payment_settings_tab",
+  "mode_of_payment_for_online_payment_section",
+  "mode_of_payment"
  ],
  "fields": [
   {
@@ -36,12 +39,30 @@
   {
    "fieldname": "column_break_uacb",
    "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "payment_settings_tab",
+   "fieldtype": "Tab Break",
+   "label": "Payment Settings"
+  },
+  {
+   "fieldname": "mode_of_payment_for_online_payment_section",
+   "fieldtype": "Section Break",
+   "label": "Mode of Payment for Online Payment"
+  },
+  {
+   "fieldname": "mode_of_payment",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Mode of Payment",
+   "options": "Mode of Payment",
+   "reqd": 1
   }
  ],
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2025-04-18 14:26:51.373635",
+ "modified": "2025-04-22 18:05:43.265488",
  "modified_by": "Administrator",
  "module": "Bottled Water System",
  "name": "Bottled Water Settings",
@@ -58,6 +79,7 @@
    "write": 1
   }
  ],
+ "row_format": "Dynamic",
  "sort_field": "modified",
  "sort_order": "DESC",
  "states": []

@@ -1,17 +1,32 @@
 {
  "actions": [],
  "allow_rename": 1,
+ "autoname": "format:{customer}-{water_bottle_product}",
  "creation": "2025-04-18 12:05:02.459290",
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
+  "details_section",
   "customer",
   "water_bottle_product",
-  "quantity",
-  "available_quantity",
+  "status",
   "column_break_kvyt",
-  "security_deposit",
-  "status"
+  "total_quantity",
+  "returned_quantity",
+  "available_quantity",
+  "security_deposite_section",
+  "total_security_deposit",
+  "column_break_mszl",
+  "security_deposit_return",
+  "column_break_jtin",
+  "balance_security_deposit",
+  "customer_security_deposit_section",
+  "customer_security_deposit",
+  "bottle_return_section",
+  "customer_security_deposit_return",
+  "bottle_product_ledger_tab",
+  "bottle_product_ledger_section",
+  "bottle_product_ledger"
  ],
  "fields": [
   {
@@ -31,14 +46,6 @@
    "reqd": 1
   },
   {
-   "fieldname": "quantity",
-   "fieldtype": "Int",
-   "in_list_view": 1,
-   "label": "Quantity",
-   "non_negative": 1,
-   "reqd": 1
-  },
-  {
    "fieldname": "available_quantity",
    "fieldtype": "Int",
    "label": "Available Quantity",
@@ -50,25 +57,116 @@
    "fieldtype": "Column Break"
   },
   {
-   "fieldname": "security_deposit",
-   "fieldtype": "Float",
-   "label": "Security Deposit",
-   "non_negative": 1
-  },
-  {
    "fieldname": "status",
    "fieldtype": "Select",
    "label": "Status",
    "options": "Active\nReturned",
    "read_only": 1
+  },
+  {
+   "fieldname": "total_quantity",
+   "fieldtype": "Int",
+   "in_list_view": 1,
+   "label": "Total Quantity",
+   "non_negative": 1,
+   "read_only": 1,
+   "reqd": 1
+  },
+  {
+   "fieldname": "total_security_deposit",
+   "fieldtype": "Float",
+   "label": "Total Security Deposit",
+   "non_negative": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "customer_security_deposit",
+   "fieldtype": "Table",
+   "label": "Customer Security Deposit",
+   "options": "Customer Security Deposit Table"
+  },
+  {
+   "fieldname": "customer_security_deposit_section",
+   "fieldtype": "Section Break",
+   "label": "Customer Security Deposit"
+  },
+  {
+   "default": "0",
+   "fieldname": "returned_quantity",
+   "fieldtype": "Int",
+   "label": "Returned Quantity",
+   "non_negative": 1,
+   "read_only": 1,
+   "reqd": 1
+  },
+  {
+   "fieldname": "bottle_return_section",
+   "fieldtype": "Section Break",
+   "label": "Bottle Return"
+  },
+  {
+   "fieldname": "customer_security_deposit_return",
+   "fieldtype": "Table",
+   "label": "Customer Security Deposit Return",
+   "options": "Customer Security Deposit Return"
+  },
+  {
+   "fieldname": "security_deposit_return",
+   "fieldtype": "Float",
+   "label": "Security Deposit Return",
+   "non_negative": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_mszl",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_jtin",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "balance_security_deposit",
+   "fieldtype": "Float",
+   "label": "Balance Security Deposit",
+   "non_negative": 1,
+   "read_only": 1
+  },
+  {
+   "collapsible": 1,
+   "fieldname": "security_deposite_section",
+   "fieldtype": "Section Break",
+   "label": "Security Deposite"
+  },
+  {
+   "fieldname": "details_section",
+   "fieldtype": "Section Break",
+   "label": "Details"
+  },
+  {
+   "fieldname": "bottle_product_ledger_section",
+   "fieldtype": "Section Break",
+   "label": "Bottle Product Ledger"
+  },
+  {
+   "fieldname": "bottle_product_ledger",
+   "fieldtype": "Table",
+   "label": "Bottle Product Ledger",
+   "options": "Bottle Product Ledger"
+  },
+  {
+   "fieldname": "bottle_product_ledger_tab",
+   "fieldtype": "Tab Break",
+   "label": "Bottle Product Ledger"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-04-18 12:08:16.516465",
+ "modified": "2025-04-25 13:01:30.022098",
  "modified_by": "Administrator",
  "module": "Bottled Water System",
  "name": "Customer Water Bottle",
+ "naming_rule": "Expression",
  "owner": "Administrator",
  "permissions": [
   {
@@ -84,6 +182,7 @@
    "write": 1
   }
  ],
+ "row_format": "Dynamic",
  "sort_field": "modified",
  "sort_order": "DESC",
  "states": []

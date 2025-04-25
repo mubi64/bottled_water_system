@@ -1,13 +1,19 @@
 import random
 import frappe
+
 from frappe.utils import now_datetime, add_to_date
 
 
 @frappe.whitelist(allow_guest=True)
 def send_otp(mobile_number):
+    # return 1
     otp = str(random.randint(100000, 999999))
     expiry = add_to_date(now_datetime(), minutes=5)
 
+    # Replace with your SMS API call here
+    # ret = send_sms(mobile_number, f"Your OTP is {otp}")
+
+    # if ret :
     doc = frappe.get_doc({
         "doctype": "Mobile OTP Login",
         "mobile_number": mobile_number,
@@ -16,17 +22,17 @@ def send_otp(mobile_number):
         "otp_expiry": expiry
     })
     doc.insert(ignore_permissions=True)
-
-    # Replace with your SMS API call here
-    # send_sms(mobile_number, f"Your OTP is {otp}")
-
     return {"status": "success", "message": "OTP sent"}
+    # else :
+        # return {"status": "failed", "message": "OTP not sent"}
 
 
-def send_sms(number, message):
-    # Example for UltraMsg or any other service
-    # Replace this with real API call
-    print(f"Sending SMS to {number}: {message}")
+# def send_sms(number, message):
+#     # Example for UltraMsg or any other service
+#     # Replace this with real API call
+
+
+
 
 
 @frappe.whitelist(allow_guest=True)
@@ -103,7 +109,6 @@ def complete_registration_and_login(mobile_number, full_name, email, birth_date,
             "username": mobile_number,
             "first_name": first_name,
             "middle_name": middle_name,
-            "first_name": first_name,
             "last_name": last_name,
             "birth_date": birth_date,
             "gender": gender,

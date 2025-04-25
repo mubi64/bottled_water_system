@@ -18,6 +18,8 @@ def get_packages():
         package["price"] = int(price) if price else 0
     return packages
 
+
+
 @frappe.whitelist()
 def package_purchase(bottle_package):
     current_user = frappe.session.user

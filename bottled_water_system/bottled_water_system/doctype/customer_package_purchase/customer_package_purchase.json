@@ -8,11 +8,14 @@
  "field_order": [
   "customer",
   "bottle_package",
+  "water_bottle_product",
   "item",
+  "bottle_type",
   "status",
   "column_break_toyx",
   "purchase_date",
   "bottles_purchased",
+  "bottles_ordered",
   "bottles_remaining"
  ],
  "fields": [
@@ -68,11 +71,34 @@
    "label": "Bottles Remaining",
    "non_negative": 1,
    "read_only": 1
+  },
+  {
+   "fetch_from": "bottle_package.bottle_type",
+   "fieldname": "bottle_type",
+   "fieldtype": "Link",
+   "label": "Bottle Type",
+   "options": "Bottle Type",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "bottle_package.water_bottle_product",
+   "fieldname": "water_bottle_product",
+   "fieldtype": "Link",
+   "label": "Water Bottle Product",
+   "options": "Water Bottle Product",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "bottle_package.bottle_quantity",
+   "fieldname": "bottles_ordered",
+   "fieldtype": "Int",
+   "label": "Bottles Ordered",
+   "non_negative": 1
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-04-21 14:52:00.192296",
+ "modified": "2025-04-23 16:46:34.669366",
  "modified_by": "Administrator",
  "module": "Bottled Water System",
  "name": "Customer Package Purchase",
@@ -92,6 +118,7 @@
    "write": 1
   }
  ],
+ "row_format": "Dynamic",
  "sort_field": "modified",
  "sort_order": "DESC",
  "states": [],

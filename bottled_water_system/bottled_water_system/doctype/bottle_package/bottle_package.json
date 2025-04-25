@@ -6,12 +6,14 @@
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
-  "enabled",
   "package_name",
   "bottle_quantity",
   "item",
   "display_order",
-  "column_break_rdfz"
+  "column_break_rdfz",
+  "enabled",
+  "water_bottle_product",
+  "bottle_type"
  ],
  "fields": [
   {
@@ -52,11 +54,26 @@
    "fieldtype": "Float",
    "label": "Display Order",
    "non_negative": 1
+  },
+  {
+   "fetch_from": "water_bottle_product.bottle_type",
+   "fieldname": "bottle_type",
+   "fieldtype": "Link",
+   "label": "Bottle Type",
+   "options": "Bottle Type",
+   "read_only": 1
+  },
+  {
+   "fieldname": "water_bottle_product",
+   "fieldtype": "Link",
+   "label": "Water Bottle Product",
+   "options": "Water Bottle Product",
+   "reqd": 1
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-04-21 14:36:28.623244",
+ "modified": "2025-04-22 14:50:22.064878",
  "modified_by": "Administrator",
  "module": "Bottled Water System",
  "name": "Bottle Package",
@@ -76,6 +93,7 @@
    "write": 1
   }
  ],
+ "row_format": "Dynamic",
  "sort_field": "modified",
  "sort_order": "DESC",
  "states": []

@@ -1,6 +1,7 @@
 {
  "actions": [],
  "allow_rename": 1,
+ "autoname": "format:WO-{customer}-{consumed_from}-{#####}",
  "creation": "2025-04-18 12:16:04.895145",
  "doctype": "DocType",
  "engine": "InnoDB",
@@ -11,11 +12,13 @@
   "outstanding_quantity",
   "consumed_from",
   "item",
+  "bottle_type",
   "status",
   "column_break_iiho",
   "order_date",
   "delivery_date",
-  "remarks"
+  "remarks",
+  "address"
  ],
  "fields": [
   {
@@ -53,7 +56,6 @@
    "fieldtype": "Link",
    "label": "Consumed From",
    "options": "Customer Package Purchase",
-   "read_only": 1,
    "reqd": 1
   },
   {
@@ -75,28 +77,40 @@
    "fieldname": "status",
    "fieldtype": "Select",
    "label": "Status",
-   "options": "Pending\nPartially Delivered\nDelivered\nCancelled",
-   "read_only": 1
+   "options": "Pending\nPartially Delivered\nDelivered\nCancelled"
   },
   {
    "fieldname": "delivered_quantity",
    "fieldtype": "Int",
-   "label": "Delivered Quantity",
-   "read_only": 1
+   "label": "Delivered Quantity"
   },
   {
    "fieldname": "outstanding_quantity",
    "fieldtype": "Int",
-   "label": "Outstanding Quantity",
+   "label": "Outstanding Quantity"
+  },
+  {
+   "fetch_from": "consumed_from.bottle_type",
+   "fieldname": "bottle_type",
+   "fieldtype": "Link",
+   "label": "Bottle Type",
+   "options": "Bottle Type",
    "read_only": 1
+  },
+  {
+   "fieldname": "address",
+   "fieldtype": "Link",
+   "label": "Address",
+   "options": "Address"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-04-18 12:26:57.622392",
+ "modified": "2025-04-25 11:29:52.950711",
  "modified_by": "Administrator",
  "module": "Bottled Water System",
  "name": "Water Order",
+ "naming_rule": "Expression",
  "owner": "Administrator",
  "permissions": [
   {
@@ -112,6 +126,7 @@
    "write": 1
   }
  ],
+ "row_format": "Dynamic",
  "sort_field": "modified",
  "sort_order": "DESC",
  "states": []
