@@ -1,21 +1,13 @@
 
 import frappe
 
+from bottled_water_system.api.common import get_customer
 
 
 @frappe.whitelist(allow_guest=True)
 def rent_water_bottle_product(water_bottle_product, quantity):
 
-    current_user = frappe.session.user
-    customer_list = frappe.db.sql("""
-        SELECT parent 
-        FROM `tabPortal User` 
-        WHERE user = %s
-        LIMIT 1
-    """, (current_user,), as_dict=True)
-    if not customer_list:
-        frappe.throw("No customer found for the current user.")
-    customer = customer_list[0].parent
+    customer = get_customer()
 
     security_deposit_string = get_security_deposit(water_bottle_product, quantity)
 
@@ -110,18 +102,7 @@ def get_security_deposit(water_bottle_product, quantity) :
 @frappe.whitelist()
 def bottle_return(water_order, bottle_returns) :
 
-
-    current_user = frappe.session.user
-    customer_list = frappe.db.sql("""
-        SELECT parent 
-        FROM `tabPortal User` 
-        WHERE user = %s
-        LIMIT 1
-    """, (current_user,), as_dict=True)
-    if not customer_list:
-        frappe.throw("No customer found for the current user.")
-    customer = customer_list[0].parent
-
+    customer = get_customer()
 
     if bottle_returns :
         for row in bottle_returns :
@@ -139,6 +120,30 @@ def bottle_return(water_order, bottle_returns) :
         return {'message':"No Bottle Returns Found", 'status':'failed'}
 
 
+
+
+
+@frappe.whitelist()
+def update_customer_water_bottle_return(self) :
+    
+    water_bottle_product = self.water_bottle_product
+    cust_water_botl_list = frappe.get_list('Customer Water Bottle',
+                                            filters = {
+                                                'customer' : self.customer ,
+                                                'water_bottle_product' : water_bottle_product ,
+                                                'status' : 'Active'
+                                            },ignore_permissions=True
+                                        )
+    
+    if cust_water_botl_list :
+        cust_water_botl_doc = frappe.get_doc('Customer Water Bottle', cust_water_botl_list[0].name)
+        cust_water_botl_doc.flags.ignore_permissions = True
+        cust_water_botl_doc.append('bottle_product_ledger',{
+            'bottle_transaction_type' : 'Return' ,
+            'bottle_return' : self.name ,
+            'return_quantity' : self.quantity_returned ,
+        })
+        cust_water_botl_doc.save()
 
 
 

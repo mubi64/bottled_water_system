@@ -3,11 +3,15 @@
 
 import frappe
 from frappe.model.document import Document
+from bottled_water_system.api.rent_bottles import update_customer_water_bottle_return
 
 
 class BottleReturn(Document):
 	
     def after_insert(self) :
+
+        update_customer_water_bottle_return(self)
+
         if self.with_security_return == 1 :
             cust_btl_wtr_list = frappe.get_all('Customer Water Bottle',
                                             filters={
@@ -30,7 +34,9 @@ class BottleReturn(Document):
                 cust_btl_wtr_doc.returned_quantity = (cust_btl_wtr_doc.returned_quantity or 0) + self.quantity_returned
                 cust_btl_wtr_doc.available_quantity = cust_btl_wtr_doc.total_quantity - cust_btl_wtr_doc.returned_quantity
                 cust_btl_wtr_doc.save(ignore_permissions=True)
-			
+
+
+
 
 
             

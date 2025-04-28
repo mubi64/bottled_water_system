@@ -6,4 +6,6 @@ from frappe.model.document import Document
 
 
 class CustomerPackagePurchase(Document):
-	pass
+	# pass
+    def before_save(self) : 
+        self.bottles_remaining = self.bottles_purchased - (self.bottles_ordered or 0)

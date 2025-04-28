@@ -14,6 +14,7 @@
   "total_quantity",
   "returned_quantity",
   "available_quantity",
+  "security_deposite_tab",
   "security_deposite_section",
   "total_security_deposit",
   "column_break_mszl",
@@ -26,7 +27,13 @@
   "customer_security_deposit_return",
   "bottle_product_ledger_tab",
   "bottle_product_ledger_section",
-  "bottle_product_ledger"
+  "bottle_product_ledger",
+  "section_break_dbrz",
+  "total_available_bottles",
+  "column_break_ikxn",
+  "company_hand",
+  "column_break_fycc",
+  "customer_hand"
  ],
  "fields": [
   {
@@ -152,17 +159,56 @@
    "fieldname": "bottle_product_ledger",
    "fieldtype": "Table",
    "label": "Bottle Product Ledger",
-   "options": "Bottle Product Ledger"
+   "options": "Bottle Product Ledger",
+   "read_only": 1
   },
   {
    "fieldname": "bottle_product_ledger_tab",
    "fieldtype": "Tab Break",
    "label": "Bottle Product Ledger"
+  },
+  {
+   "fieldname": "security_deposite_tab",
+   "fieldtype": "Tab Break",
+   "label": "Security Deposite"
+  },
+  {
+   "fieldname": "section_break_dbrz",
+   "fieldtype": "Section Break"
+  },
+  {
+   "default": "0",
+   "fieldname": "total_available_bottles",
+   "fieldtype": "Float",
+   "label": "Total Available Bottles",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_ikxn",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "0",
+   "fieldname": "customer_hand",
+   "fieldtype": "Float",
+   "label": "Customer Hand",
+   "read_only": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "company_hand",
+   "fieldtype": "Float",
+   "label": "Company Hand",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_fycc",
+   "fieldtype": "Column Break"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-04-25 13:01:30.022098",
+ "modified": "2025-04-28 11:21:01.893991",
  "modified_by": "Administrator",
  "module": "Bottled Water System",
  "name": "Customer Water Bottle",

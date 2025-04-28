@@ -1,6 +1,6 @@
 import random
 import frappe
-
+from bottled_water_system.api.common import get_customer
 from frappe.utils import now_datetime, add_to_date
 
 
@@ -212,5 +212,55 @@ def complete_registration_and_login(mobile_number, full_name, email, birth_date,
 
     except Exception as e:
         return {"status": "error", "message": f"Registration failed: {frappe.get_traceback()}"}
+    
+
+
+
+
+
+@frappe.whitelist()
+def create_address(address_title, address_type, address_line1, city, country) :
+    customer = get_customer()
+
+    add_doc = frappe.new_doc('Address')
+    add_doc.address_title = address_title
+    add_doc.address_type = address_type
+    add_doc.address_line1 = address_line1
+    add_doc.city = city
+    add_doc.country = country
+    add_doc.append('links',{
+        'link_doctype' : 'Customer' ,
+        'link_name' : customer ,
+        'link_title' : customer ,
+    })
+    add_doc.insert(ignore_permissions=True)
+    return {'message': f'Address {add_doc.name} created successfully', 'status':'success'}
+
+
+
+@frappe.whitelist()
+def get_addresses() :
+    addresses = []
+    customer = get_customer()
+
+    dyn_ln_list = frappe.get_all('Dynamic Link',
+                   filters={
+                       'parenttype' : 'Address' ,
+                       'link_doctype' : 'Customer' ,
+                       'link_name' : customer ,
+                   },
+                   fields = ['name', 'parent'])
+    
+    if dyn_ln_list :
+        for row in dyn_ln_list :
+            if row.parent and row.parent not in addresses:
+                add_doc = frappe.get_doc('Address', row.parent)
+                addresses.append(add_doc)
+
+    return {'addresses' : addresses}
+
+
+
+
 
 

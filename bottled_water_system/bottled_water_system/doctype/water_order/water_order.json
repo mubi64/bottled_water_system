@@ -61,8 +61,9 @@
   {
    "fetch_from": "consumed_from.item",
    "fieldname": "item",
-   "fieldtype": "Read Only",
-   "label": "Item"
+   "fieldtype": "Link",
+   "label": "Item",
+   "options": "Item"
   },
   {
    "fieldname": "column_break_iiho",
@@ -106,7 +107,7 @@
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-04-25 11:29:52.950711",
+ "modified": "2025-04-26 11:29:11.812325",
  "modified_by": "Administrator",
  "module": "Bottled Water System",
  "name": "Water Order",

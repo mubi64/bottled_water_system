@@ -1,5 +1,6 @@
 import frappe
 from datetime import date
+from bottled_water_system.api.common import get_customer
 from erpnext.controllers.accounts_controller import get_item_details
 
 
@@ -89,6 +90,27 @@ def package_purchase(bottle_package):
 
 
     return f"Package '{bottle_package}' purchased and invoiced successfully for customer '{customer_name}'."
+
+
+
+
+
+@frappe.whitelist()
+def get_customer_package_purchases() :
+
+    customer = get_customer()
+
+    cust_package_purchases_list = frappe.get_all('Customer Package Purchase',
+                                                 filters = {
+                                                     'customer' : customer ,
+                                                     'status' : 'Active'
+                                                 },
+                                                 fields = ['*']
+                                                 )
+    if cust_package_purchases_list :
+        return cust_package_purchases_list
+
+
 
 
 

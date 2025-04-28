@@ -28,18 +28,12 @@
    "reqd": 1
   },
   {
-   "fieldname": "bottle_package",
-   "fieldtype": "Link",
-   "in_list_view": 1,
-   "label": "Bottle Package",
-   "options": "Bottle Package",
-   "reqd": 1
-  },
-  {
    "fetch_from": "bottle_package.item",
    "fieldname": "item",
-   "fieldtype": "Read Only",
-   "label": "Item"
+   "fieldtype": "Link",
+   "label": "Item",
+   "options": "Item",
+   "read_only": 1
   },
   {
    "fieldname": "column_break_toyx",
@@ -69,8 +63,7 @@
    "fieldname": "bottles_remaining",
    "fieldtype": "Int",
    "label": "Bottles Remaining",
-   "non_negative": 1,
-   "read_only": 1
+   "non_negative": 1
   },
   {
    "fetch_from": "bottle_package.bottle_type",
@@ -81,24 +74,31 @@
    "read_only": 1
   },
   {
-   "fetch_from": "bottle_package.water_bottle_product",
-   "fieldname": "water_bottle_product",
-   "fieldtype": "Link",
-   "label": "Water Bottle Product",
-   "options": "Water Bottle Product",
-   "read_only": 1
-  },
-  {
-   "fetch_from": "bottle_package.bottle_quantity",
+   "default": "0",
    "fieldname": "bottles_ordered",
    "fieldtype": "Int",
    "label": "Bottles Ordered",
    "non_negative": 1
+  },
+  {
+   "fieldname": "bottle_package",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Bottle Package",
+   "options": "Bottle Package",
+   "reqd": 1
+  },
+  {
+   "fetch_from": "bottle_package.water_bottle_product",
+   "fieldname": "water_bottle_product",
+   "fieldtype": "Link",
+   "label": "Water Bottle Product",
+   "options": "Water Bottle Product"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-04-23 16:46:34.669366",
+ "modified": "2025-04-26 12:34:23.228181",
  "modified_by": "Administrator",
  "module": "Bottled Water System",
  "name": "Customer Package Purchase",
