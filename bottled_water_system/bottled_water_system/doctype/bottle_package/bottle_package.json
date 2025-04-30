@@ -13,7 +13,8 @@
   "column_break_rdfz",
   "enabled",
   "water_bottle_product",
-  "bottle_type"
+  "bottle_type",
+  "description"
  ],
  "fields": [
   {
@@ -69,11 +70,16 @@
    "label": "Water Bottle Product",
    "options": "Water Bottle Product",
    "reqd": 1
+  },
+  {
+   "fieldname": "description",
+   "fieldtype": "Small Text",
+   "label": "Description"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-04-30 15:57:19.604440",
+ "modified": "2025-04-30 16:51:18.223527",
  "modified_by": "Administrator",
  "module": "Bottled Water System",
  "name": "Bottle Package",

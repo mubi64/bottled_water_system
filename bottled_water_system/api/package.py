@@ -8,7 +8,7 @@ from erpnext.controllers.accounts_controller import get_item_details
 def get_packages():
     packages = frappe.get_all("Bottle Package", 
         filters={"enabled":1},
-        fields=["name", "package_name", "bottle_quantity", "item"],
+        fields=["name", "package_name", "bottle_quantity", "item", "description"],
         order_by="display_order")
 
     for package in packages:
@@ -24,7 +24,7 @@ def get_packages():
         package["price"] = int(price) if price else 0
         package["currency"] = currency
         package['image'] = itm_doc.image
-        # package['description'] = itm_doc.description
+
     return packages
 
 
