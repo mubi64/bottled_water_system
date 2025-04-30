@@ -5,18 +5,42 @@
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
-  "section_break_as7c"
+  "card_number",
+  "expiry_month",
+  "column_break_lrux",
+  "cvc",
+  "expiry_date"
  ],
  "fields": [
   {
-   "fieldname": "section_break_as7c",
-   "fieldtype": "Section Break"
+   "fieldname": "card_number",
+   "fieldtype": "Data",
+   "label": "Card Number"
+  },
+  {
+   "fieldname": "column_break_lrux",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "cvc",
+   "fieldtype": "Int",
+   "label": "CVC"
+  },
+  {
+   "fieldname": "expiry_month",
+   "fieldtype": "Data",
+   "label": "Expiry Month"
+  },
+  {
+   "fieldname": "expiry_date",
+   "fieldtype": "Data",
+   "label": "Expiry Date"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-04-25 11:02:50.563649",
+ "modified": "2025-04-28 18:19:12.964855",
  "modified_by": "Administrator",
  "module": "Bottled Water System",
  "name": "Payment Gateway",

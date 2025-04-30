@@ -12,11 +12,19 @@ def get_packages():
         order_by="display_order")
 
     for package in packages:
+        itm_doc = frappe.get_doc('Item', package.get("item"))
+
         price = frappe.db.get_value("Item Price", 
             {"item_code": package.get("item")}, 
             "price_list_rate")
+        currency = frappe.db.get_value("Item Price", 
+            {"item_code": package.get("item")}, 
+            "currency")
 
         package["price"] = int(price) if price else 0
+        package["currency"] = currency
+        package['image'] = itm_doc.image
+        # package['description'] = itm_doc.description
     return packages
 
 

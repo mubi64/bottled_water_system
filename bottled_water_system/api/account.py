@@ -214,6 +214,11 @@ def complete_registration_and_login(mobile_number, full_name, email, birth_date,
         return {"status": "error", "message": f"Registration failed: {frappe.get_traceback()}"}
     
 
+@frappe.whitelist(allow_guest=True)
+def logout_user():
+    frappe.local.login_manager.logout()
+    frappe.db.commit()
+    return {"message": "Logged out successfully"}
 
 
 

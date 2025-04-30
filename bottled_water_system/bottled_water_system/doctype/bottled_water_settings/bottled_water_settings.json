@@ -10,6 +10,11 @@
   "award_bottle_product",
   "column_break_uacb",
   "payment_settings_tab",
+  "stripe_settings_section",
+  "publishable_key",
+  "secret_key",
+  "column_break_zsck",
+  "currency",
   "mode_of_payment_for_online_payment_section",
   "mode_of_payment"
  ],
@@ -57,12 +62,40 @@
    "label": "Mode of Payment",
    "options": "Mode of Payment",
    "reqd": 1
+  },
+  {
+   "fieldname": "publishable_key",
+   "fieldtype": "Data",
+   "label": "Publishable Key ",
+   "reqd": 1
+  },
+  {
+   "fieldname": "column_break_zsck",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "secret_key",
+   "fieldtype": "Data",
+   "label": "Secret Key",
+   "reqd": 1
+  },
+  {
+   "fieldname": "stripe_settings_section",
+   "fieldtype": "Section Break",
+   "label": "Stripe Settings"
+  },
+  {
+   "default": "AED",
+   "fieldname": "currency",
+   "fieldtype": "Link",
+   "label": "Currency",
+   "options": "Currency"
   }
  ],
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2025-04-22 18:05:43.265488",
+ "modified": "2025-04-30 12:37:41.090952",
  "modified_by": "Administrator",
  "module": "Bottled Water System",
  "name": "Bottled Water Settings",
