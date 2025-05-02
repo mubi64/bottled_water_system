@@ -239,7 +239,7 @@ def logout_user():
 
 
 @frappe.whitelist()
-def create_address(address_title, address_type, address_line1, city, country) :
+def create_address(address_title, address_type, address_line1, city, country, latitude, longitude) :
     customer = get_customer()
 
     add_doc = frappe.new_doc('Address')
@@ -248,6 +248,8 @@ def create_address(address_title, address_type, address_line1, city, country) :
     add_doc.address_line1 = address_line1
     add_doc.city = city
     add_doc.country = country
+    add_doc.custom_latitude = latitude
+    add_doc.custom_longitude = longitude
     add_doc.append('links',{
         'link_doctype' : 'Customer' ,
         'link_name' : customer ,

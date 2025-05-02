@@ -24,6 +24,26 @@ app_license = "mit"
 # Includes in <head>
 # ------------------
 
+
+
+fixtures = [
+    {
+      "doctype" : "Custom Field",
+      "filters" : [
+        [  
+          "fieldname" , "in" , (
+                                "custom_latitude",
+                                "custom_longitude"
+                                )
+	  	  
+        ]  
+      ]
+	}
+]
+
+
+
+
 # include js, css files in header of desk.html
 # app_include_css = "/assets/bottled_water_system/css/bottled_water_system.css"
 # app_include_js = "/assets/bottled_water_system/js/bottled_water_system.js"

@@ -30,7 +30,7 @@ def get_packages():
 
 
 @frappe.whitelist()
-def package_purchase(bottle_package):
+def package_purchase(bottle_packages):
     current_user = frappe.session.user
 
     customer = frappe.db.sql("""
@@ -45,15 +45,6 @@ def package_purchase(bottle_package):
 
     customer_name = customer[0].parent
 
-    package_doc = frappe.get_doc("Bottle Package", bottle_package)
-
-    new_purchase = frappe.new_doc("Customer Package Purchase")
-    new_purchase.customer = customer_name
-    new_purchase.bottle_package = bottle_package
-    new_purchase.purchase_date = date.today()
-    new_purchase.bottles_remaining = package_doc.bottle_quantity
-    new_purchase.insert(ignore_permissions=True)
-    
     company = frappe.defaults.get_user_default("company")
     if not company:
         frappe.throw("No default company set for the current user.")
@@ -63,47 +54,64 @@ def package_purchase(bottle_package):
     selling_price_list = frappe.db.get_single_value("Selling Settings", "selling_price_list") or "Standard Selling"
 
 
-    item_details = get_item_details({
-        "item_code": package_doc.item,
-        "qty": 1,
-        "doctype": "Sales Invoice",
-        "customer": customer_name,
-        "company": company,
-        "currency": company_currency
-    })
-
-     # Fallback: Manually fetch price if not returned by get_item_details
-    if not item_details.get("rate") or item_details["rate"] == 0:
-        price = frappe.db.get_value("Item Price", {
-            "item_code": package_doc.item,
-            "price_list": selling_price_list,
-            "currency": company_currency
-        }, "price_list_rate")
-
-        if not price:
-            frappe.throw(f"No Item Price found for {package_doc.item} in price list {selling_price_list} with currency {company_currency}.")
-
-        item_details["rate"] = price
-        item_details["price_list_rate"] = price
-
     sales_invoice = frappe.new_doc("Sales Invoice")
     sales_invoice.company = company
     sales_invoice.currency = company_currency 
     sales_invoice.customer = customer_name
-    sales_invoice.append("items", item_details)
-    sales_invoice.insert(ignore_permissions=True)
 
+    cust_pakage_purchase = []
+
+
+    for row in bottle_packages :
+
+        package_doc = frappe.get_doc("Bottle Package", row['bottle_package'])
+
+        new_purchase = frappe.new_doc("Customer Package Purchase")
+        new_purchase.customer = customer_name
+        new_purchase.bottle_package = row['bottle_package']
+        new_purchase.purchase_date = date.today()
+        new_purchase.package_quantity = row['qty']
+        new_purchase.total_bottles = package_doc.bottle_quantity * row['qty']
+        new_purchase.bottles_remaining = package_doc.bottle_quantity * row['qty']
+        new_purchase.insert(ignore_permissions=True)
+        cust_pakage_purchase.append(new_purchase.name)
+        
+        item_details = get_item_details({
+            "item_code": package_doc.item,
+            "qty": row['qty'],
+            "doctype": "Sales Invoice",
+            "customer": customer_name,
+            "company": company,
+            "currency": company_currency
+        })
+
+        # Fallback: Manually fetch price if not returned by get_item_details
+        if not item_details.get("rate") or item_details["rate"] == 0:
+            price = frappe.db.get_value("Item Price", {
+                "item_code": package_doc.item,
+                "price_list": selling_price_list,
+                "currency": company_currency
+            }, "price_list_rate")
+
+            if not price:
+                frappe.throw(f"No Item Price found for {package_doc.item} in price list {selling_price_list} with currency {company_currency}.")
+
+            item_details["rate"] = price
+            item_details["price_list_rate"] = price
+        
+        sales_invoice.append("items", item_details)
+
+
+    sales_invoice.insert(ignore_permissions=True)
     frappe.db.commit()
 
-
-
-    return {
-        'message': f"Package '{bottle_package}' purchased and invoiced successfully for customer '{customer_name}'.",
-        'sales_invoice': sales_invoice.name
-    }
+    if cust_pakage_purchase :
+        for x in cust_pakage_purchase :
+            frappe.db.set_value('Customer Package Purchase', x, 'sales_invoice', sales_invoice.name)
 
 
 
+    return {'sales_invoice': sales_invoice.name}
 
 
 
@@ -123,6 +131,12 @@ def get_customer_package_purchases() :
         return cust_package_purchases_list
 
 
+
+
+@frappe.whitelist()
+def get_water_bottle_product() :
+    water_bottle_product_list = frappe.get_all('Water Bottle Product',fields=['*'])
+    return water_bottle_product_list
 
 
 

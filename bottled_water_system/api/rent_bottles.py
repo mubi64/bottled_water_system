@@ -5,12 +5,9 @@ from bottled_water_system.api.common import get_customer
 
 
 @frappe.whitelist(allow_guest=True)
-def rent_water_bottle_product(water_bottle_product, quantity):
+def rent_water_bottle_product(customer_water_bottle) :
 
     customer = get_customer()
-
-    security_deposit_string = get_security_deposit(water_bottle_product, quantity)
-
     mode_of_payment = frappe.db.get_single_value('Bottled Water Settings', 'mode_of_payment')
     mode_of_payment_doc = frappe.get_doc('Mode of Payment', mode_of_payment)
 
@@ -20,72 +17,73 @@ def rent_water_bottle_product(water_bottle_product, quantity):
             if x.default_account :
                 acc_paid_to = x.default_account
                 break
-        
         if not acc_paid_to :
             return {'message':'Account None does not match with Company in Mode of Account:', 'status':'failed'}
-
     else :
         return {'message':'Please set default Cash or Bank account in Mode of Payment', 'status':'failed'}
 
 
-    cust_water_bottle_list = frappe.get_all("Customer Water Bottle", 
-        filters={
-            "customer": customer,
-            "water_bottle_product": water_bottle_product,
-            "status": 'Active'
-        },
-        fields=["name"],
-    )
-
+    total_security = 0
+    for row in customer_water_bottle :
+        security_deposit_string = get_security_deposit(row['water_bottle_product'], row['quantity'])
+        total_security = total_security + security_deposit_string['total_security_deposit']
 
     payment_type = 'Receive'
-    paid_amount = security_deposit_string['total_security_deposit']
-    received_amount = security_deposit_string['total_security_deposit']
+    paid_amount = total_security
+    received_amount = total_security
     reference_no = 'Rent Bottle Water'
     pay_ent_doc = create_payment_entry(payment_type, mode_of_payment, customer, paid_amount, received_amount, reference_no, acc_paid_to )
+    
+    message = []
+    message.append({'payment_entry' : pay_ent_doc.name})
+    for row in customer_water_bottle :
+        cust_water_bottle_list = frappe.get_all("Customer Water Bottle", 
+                                    filters={
+                                        "customer": customer,
+                                        "water_bottle_product": row['water_bottle_product'],
+                                        "status": 'Active'
+                                    },
+                                    fields=["name"],
+                                )
 
+        if cust_water_bottle_list:
+            cust_water_bottle_doc = frappe.get_doc('Customer Water Bottle', cust_water_bottle_list[0].name)
+            cust_water_bottle_doc.flags.ignore_permissions = True
+            cust_water_bottle_doc.append('customer_security_deposit', {
+                'posting_date': frappe.utils.today(),
+                'security_deposit': security_deposit_string['total_security_deposit'],
+                'quantity': row['quantity'],
+                'payment_entry': pay_ent_doc.name,
+            })
+            cust_water_bottle_doc.total_quantity += row['quantity']
+            cust_water_bottle_doc.available_quantity = cust_water_bottle_doc.total_quantity - (cust_water_bottle_doc.returned_quantity or 0)
+            cust_water_bottle_doc.total_security_deposit += security_deposit_string['total_security_deposit']
+            cust_water_bottle_doc.balance_security_deposit = cust_water_bottle_doc.total_security_deposit - cust_water_bottle_doc.security_deposit_return
+            cust_water_bottle_doc.save()
 
+            message.append({'message': f"{cust_water_bottle_doc.name} updated"})
 
+        else:
+            cust_water_bottle_doc = frappe.new_doc('Customer Water Bottle')
+            cust_water_bottle_doc.customer = customer
+            cust_water_bottle_doc.water_bottle_product = row['water_bottle_product']
+            cust_water_bottle_doc.total_quantity = row['quantity']
+            cust_water_bottle_doc.returned_quantity = 0
+            cust_water_bottle_doc.available_quantity = row['quantity']
+            cust_water_bottle_doc.total_security_deposit = security_deposit_string['total_security_deposit']
+            cust_water_bottle_doc.status = 'Active'
+            cust_water_bottle_doc.append('customer_security_deposit', {
+                'posting_date': frappe.utils.today(),
+                'security_deposit': security_deposit_string['total_security_deposit'],
+                'quantity': row['quantity'],
+                'payment_entry': pay_ent_doc.name,
+            })
+            cust_water_bottle_doc.insert(ignore_permissions=True)
 
-    if cust_water_bottle_list:
-        cust_water_bottle_doc = frappe.get_doc('Customer Water Bottle', cust_water_bottle_list[0].name)
-        cust_water_bottle_doc.flags.ignore_permissions = True
-        cust_water_bottle_doc.append('customer_security_deposit', {
-            'posting_date': frappe.utils.today(),
-            'security_deposit': security_deposit_string['total_security_deposit'],
-            'quantity': quantity,
-            'payment_entry': pay_ent_doc.name,
-        })
-        cust_water_bottle_doc.total_quantity += quantity
-        cust_water_bottle_doc.available_quantity = cust_water_bottle_doc.total_quantity - (cust_water_bottle_doc.returned_quantity or 0)
-        cust_water_bottle_doc.total_security_deposit += security_deposit_string['total_security_deposit']
-        cust_water_bottle_doc.balance_security_deposit = cust_water_bottle_doc.total_security_deposit - cust_water_bottle_doc.security_deposit_return
-        cust_water_bottle_doc.save()
-
-        return {'message': 'Customer Water Bottle updated', 'status':'success'}
-
-    else:
-        cust_water_bottle_doc = frappe.new_doc('Customer Water Bottle')
-        cust_water_bottle_doc.customer = customer
-        cust_water_bottle_doc.water_bottle_product = water_bottle_product
-        cust_water_bottle_doc.total_quantity = quantity
-        cust_water_bottle_doc.returned_quantity = 0
-        cust_water_bottle_doc.available_quantity = quantity
-        cust_water_bottle_doc.total_security_deposit = security_deposit_string['total_security_deposit']
-        cust_water_bottle_doc.status = 'Active'
-        cust_water_bottle_doc.append('customer_security_deposit', {
-            'posting_date': frappe.utils.today(),
-            'security_deposit': security_deposit_string['total_security_deposit'],
-            'quantity': quantity,
-            'payment_entry': pay_ent_doc.name,
-        })
-        cust_water_bottle_doc.insert(ignore_permissions=True)
-
-        return {'message': 'New Customer Water Bottle created', 'status':'success'}
-     
-
-
-
+            message.append({'message': f"{cust_water_bottle_doc.name} created"})
+        
+    
+    return message
 
 
 
@@ -95,7 +93,6 @@ def get_security_deposit(water_bottle_product, quantity) :
     wat_bot_pd_price = frappe.db.get_value('Water Bottle Product', water_bottle_product, 'price')
     total_wat_bot_pd_price = (wat_bot_pd_price or 0) * quantity
     return {'total_security_deposit': total_wat_bot_pd_price}
-
 
 
 
@@ -118,8 +115,6 @@ def bottle_return(water_order, bottle_returns) :
 
     else :
         return {'message':"No Bottle Returns Found", 'status':'failed'}
-
-
 
 
 
@@ -196,11 +191,6 @@ def security_return(water_bottle_product, quantity) :
     return { 'message':'bottle returned and payment entry created', 'payment_entry': pay_ent_doc.name, 'status':'success'}
 
     
-    
-
-
-
-
 
 
 def create_payment_entry(payment_type, mode_of_payment, customer, paid_amount, received_amount, reference_no, acc_paid_to ) :

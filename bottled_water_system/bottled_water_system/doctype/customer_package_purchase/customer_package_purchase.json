@@ -15,8 +15,11 @@
   "column_break_toyx",
   "purchase_date",
   "bottles_purchased",
+  "package_quantity",
+  "total_bottles",
   "bottles_ordered",
-  "bottles_remaining"
+  "bottles_remaining",
+  "sales_invoice"
  ],
  "fields": [
   {
@@ -56,14 +59,15 @@
    "fetch_from": "bottle_package.bottle_quantity",
    "fieldname": "bottles_purchased",
    "fieldtype": "Int",
-   "label": "Bottles Purchased",
+   "label": "Bottles Per Package",
    "non_negative": 1
   },
   {
    "fieldname": "bottles_remaining",
    "fieldtype": "Int",
    "label": "Bottles Remaining",
-   "non_negative": 1
+   "non_negative": 1,
+   "read_only": 1
   },
   {
    "fetch_from": "bottle_package.bottle_type",
@@ -78,7 +82,8 @@
    "fieldname": "bottles_ordered",
    "fieldtype": "Int",
    "label": "Bottles Ordered",
-   "non_negative": 1
+   "non_negative": 1,
+   "read_only": 1
   },
   {
    "fieldname": "bottle_package",
@@ -94,11 +99,33 @@
    "fieldtype": "Link",
    "label": "Water Bottle Product",
    "options": "Water Bottle Product"
+  },
+  {
+   "fieldname": "sales_invoice",
+   "fieldtype": "Link",
+   "label": "Sales Invoice",
+   "options": "Sales Invoice",
+   "read_only": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "package_quantity",
+   "fieldtype": "Int",
+   "label": "Package Quantity",
+   "non_negative": 1,
+   "read_only": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "total_bottles",
+   "fieldtype": "Int",
+   "label": "Total Bottles",
+   "read_only": 1
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-04-26 12:34:23.228181",
+ "modified": "2025-05-02 12:21:05.076530",
  "modified_by": "Administrator",
  "module": "Bottled Water System",
  "name": "Customer Package Purchase",

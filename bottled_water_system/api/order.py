@@ -35,11 +35,11 @@ def place_water_order(package_name , bottle_quantity, delivery_date, address) :
         wo_doc.order_date = frappe.utils.today()
         wo_doc.insert(ignore_permissions=True)
 
-        return {'message':'Water Order placed successfully', 'status':'success'}
+        return {'message':'Water Order placed successfully.', 'status':'success'}
 
     else :
-        return {'message':'Available Bottle quantity is less than ordered quantity', 'status':'failed'}
-
+        bottle_package = frappe.db.get_value("Customer Package Purchase",  package_name, "bottle_package")
+        return {'message': f'Available water bottle product "{bottle_package}" is {available["available_qty"]}.', 'status':'failed'}
 
 
 
@@ -87,7 +87,6 @@ def update_customer_water_bottle(self) :
 
 
 
-
 @frappe.whitelist()
 def check_available_qty(customer, package_name) :
     available_qty = 0
@@ -108,8 +107,6 @@ def check_available_qty(customer, package_name) :
             available_qty = available_qty + (wat_botle.available_quantity or 0)
     
     return {"available_qty" : available_qty}
-
-
 
 
 
@@ -142,7 +139,7 @@ def update_bottle_ledger_on_delivery(water_order_doc) :
                                            }
                                            ,ignore_permissions=True
                                         )
-    print(cust_water_botl_list)
+    # print(cust_water_botl_list)
     if cust_water_botl_list :
         cust_water_botl_doc = frappe.get_doc('Customer Water Bottle', cust_water_botl_list[0].name)
         if cust_water_botl_doc.bottle_product_ledger :

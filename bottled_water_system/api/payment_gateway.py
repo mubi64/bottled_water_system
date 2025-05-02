@@ -10,28 +10,51 @@ stripe.api_key = frappe.db.get_single_value('Bottled Water Settings','secret_key
 
 
 @frappe.whitelist()
-def make_payment(card_number, exp_month, exp_year, cvc, sales_invoice) :
-    currency = frappe.db.get_value('Sales Invoice', sales_invoice, 'currency')
-    amount = frappe.db.get_value('Sales Invoice', sales_invoice, 'grand_total')
+def make_payment(card_number, exp_month, exp_year, cvc, is_bottle_rent, sales_invoice, customer_water_bottle) :
+
+    
+    amount = 0
+    if is_bottle_rent != 1 :
+        currency = frappe.db.get_value('Sales Invoice', sales_invoice, 'currency')
+        amount = frappe.db.get_value('Sales Invoice', sales_invoice, 'grand_total')
+    else :
+        company = frappe.defaults.get_user_default("company")
+        if not company:
+            frappe.throw("No default company set for the current user.")
+        company_currency = frappe.db.get_value("Company", company, "default_currency") or "PKR"
+
+        if customer_water_bottle :
+            for row in customer_water_bottle :
+                price = 0
+                sub_amount = 0
+                price = frappe.db.get_value('Water Bottle Product', row['water_bottle_product'], 'price')
+                sub_amount = (price or 0) * row['quantity']
+                amount = amount + sub_amount
+                currency = company_currency
+
     amount = int(amount * 100)
     token = create_card_token(card_number, exp_month, exp_year, cvc)
     payment_method_id = create_payment_method(token)
     payment_intent_id = make_payment_intent(payment_method_id, amount, currency)
     payment_confirm = confirm_payment_intent(payment_intent_id, payment_method_id)
-    submit_sales_invoice(sales_invoice)
     
-    current_user = frappe.session.user
-    frappe.set_user('Administrator')
+    if is_bottle_rent != 1 :
+        submit_sales_invoice(sales_invoice)
+    
+        current_user = frappe.session.user
+        frappe.set_user('Administrator')
 
-    pe = get_payment_entry('Sales Invoice', sales_invoice)
-    pe.reference_no = 'Card'
-    pe.docstatus = 1
-    
-    frappe.set_user(current_user)
-    
-    pe.insert(ignore_permissions=True)
+        pe = get_payment_entry('Sales Invoice', sales_invoice)
+        pe.reference_no = 'Card'
+        pe.docstatus = 1
+        
+        frappe.set_user(current_user)
+        
+        pe.insert(ignore_permissions=True)
 
-    return payment_confirm, pe
+        return payment_confirm, pe
+    else :
+        return payment_confirm
 
 
 def submit_sales_invoice(sales_invoice) :
@@ -102,7 +125,6 @@ def confirm_payment_intent(payment_intent_id, payment_method_id) :
     )
 
     return payment_intent
-
 
 
 
