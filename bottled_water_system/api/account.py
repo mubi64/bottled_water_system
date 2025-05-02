@@ -1,4 +1,7 @@
+
+
 import random
+import requests
 import frappe
 from bottled_water_system.api.common import get_customer
 from frappe.utils import now_datetime, add_to_date
@@ -27,9 +30,22 @@ def send_otp(mobile_number):
         # return {"status": "failed", "message": "OTP not sent"}
 
 
-# def send_sms(number, message):
-#     # Example for UltraMsg or any other service
-#     # Replace this with real API call
+def send_sms(number, message):
+    # Example for UltraMsg or any other service
+    base_url = "https://api.ultramsg.com"
+    instance_id = "instance117471"
+
+    token = "m0olwomm15cknmet"
+
+    url = f"{base_url}/{instance_id}/messages/chat"
+    payload = f"token={token}&to={number}&body={message}"
+    payload = payload.encode('utf8').decode('iso-8859-1')
+    headers = {'content-type': 'application/x-www-form-urlencoded'}
+
+    response = requests.request("POST", url, data=payload, headers=headers)
+
+    return response.text
+    # Replace this with real API call
 
 
 
@@ -194,9 +210,8 @@ def complete_registration_and_login(mobile_number, full_name, email, birth_date,
                 "doctype": "Customer Water Bottle",
                 "customer": customer.name,
                 "water_bottle_product": settings.award_bottle_product,
-                "quantity": settings.award_bottle_quantity,
+                "total_quantity": settings.award_bottle_quantity,
                 "available_quantity": settings.award_bottle_quantity,
-                "security_deposit": 0,
                 "status": "Active"
             }).insert(ignore_permissions=True)
 

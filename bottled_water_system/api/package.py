@@ -97,7 +97,11 @@ def package_purchase(bottle_package):
 
 
 
-    return f"Package '{bottle_package}' purchased and invoiced successfully for customer '{customer_name}'."
+    return {
+        'message': f"Package '{bottle_package}' purchased and invoiced successfully for customer '{customer_name}'.",
+        'sales_invoice': sales_invoice.name
+    }
+
 
 
 
