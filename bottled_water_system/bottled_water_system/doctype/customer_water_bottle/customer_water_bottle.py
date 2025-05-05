@@ -8,7 +8,7 @@ from frappe.model.document import Document
 class CustomerWaterBottle(Document):
 	# pass
     def before_save(self) :
-        self.balance_security_deposit = self.total_security_deposit - self.security_deposit_return
+        self.balance_security_deposit = (self.total_security_deposit or 0) - (self.security_deposit_return or 0)
         self.total_available_bottles = (self.available_quantity or 0)
 
         del_qty = 0
