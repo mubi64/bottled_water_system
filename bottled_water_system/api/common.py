@@ -2,7 +2,7 @@ import frappe
 
 @frappe.whitelist(allow_guest=True)
 def get_genders():
-    genders = frappe.get_all("Gender")
+    genders = frappe.get_all("Gender", pluck='name')
     return genders
 
 

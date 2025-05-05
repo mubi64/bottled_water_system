@@ -17,6 +17,18 @@ class WaterOrder(Document):
     def after_insert(self) :
         update_customer_water_bottle(self)
         update_customer_package_purchase(self, True)
+
+    def before_save(self) :
+        self.outstanding_quantity = self.bottle_quantity - self.delivered_quantity
+
+
+        if self.status != 'Cancelled' :
+            if self.delivered_quantity == 0 :
+                self.status = 'Pending'
+            elif self.delivered_quantity > 0 and self.delivered_quantity < self.bottle_quantity :
+                self.status = 'Partially Delivered'
+            elif self.delivered_quantity == self.bottle_quantity :
+                self.status = 'Delivered'
     
 		
         
