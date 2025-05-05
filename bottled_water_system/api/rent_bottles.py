@@ -1,5 +1,6 @@
 
 import frappe
+from frappe.utils import cint
 
 from bottled_water_system.api.common import get_customer
 
@@ -57,8 +58,8 @@ def rent_water_bottle_product(customer_water_bottle) :
             })
             cust_water_bottle_doc.total_quantity += row['quantity']
             cust_water_bottle_doc.available_quantity = cust_water_bottle_doc.total_quantity - (cust_water_bottle_doc.returned_quantity or 0)
-            cust_water_bottle_doc.total_security_deposit += security_deposit_string['total_security_deposit']
-            cust_water_bottle_doc.balance_security_deposit = cust_water_bottle_doc.total_security_deposit - cust_water_bottle_doc.security_deposit_return
+            cust_water_bottle_doc.total_security_deposit += (security_deposit_string['total_security_deposit'] or 0)
+            cust_water_bottle_doc.balance_security_deposit = cust_water_bottle_doc.total_security_deposit - (cust_water_bottle_doc.security_deposit_return or 0)
             cust_water_bottle_doc.save()
 
             message.append({'message': f"{cust_water_bottle_doc.name} updated"})
@@ -223,6 +224,26 @@ def create_payment_entry(payment_type, mode_of_payment, customer, paid_amount, r
 
 
 
+@frappe.whitelist()
+def get_customer_water_bottle() :
+
+    customer = get_customer()
+    cust_water_bottle_list = frappe.get_all('Customer Water Bottle',
+                                            filters = {
+                                                'customer' : customer ,
+                                                'status' : 'Active'
+                                            },
+                                            fields = ['name','water_bottle_product','available_quantity', 'company_hand','customer_hand']
+                                            )
+    if cust_water_bottle_list :
+        for row in cust_water_bottle_list :
+            water_bottle_product_doc = frappe.get_doc('Water Bottle Product', row.water_bottle_product)
+            row['bottle_type'] = water_bottle_product_doc.bottle_type
+            row['item'] = water_bottle_product_doc.item
+            row['price'] = water_bottle_product_doc.price
+
+    
+    return cust_water_bottle_list
 
 
 
