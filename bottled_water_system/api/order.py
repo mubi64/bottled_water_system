@@ -43,6 +43,19 @@ def place_water_order(package_name , bottle_quantity, delivery_date, address) :
 
 
 
+@frappe.whitelist()
+def get_customer_water_order() :
+    customer = get_customer()
+    water_order_list = frappe.get_all('Water Order',
+                                    filters = {
+                                        'customer' : customer ,
+                                        'status' : ['!=', 'Cancelled']
+                                    },
+                                    fields = ['*']
+                                )
+    return water_order_list
+
+
 
 @frappe.whitelist()
 def update_customer_package_purchase(self, bool) :

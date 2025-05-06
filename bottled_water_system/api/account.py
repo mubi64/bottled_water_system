@@ -5,7 +5,7 @@ import requests
 import frappe
 from bottled_water_system.api.common import get_customer
 from frappe.utils import now_datetime, add_to_date
-from twilio.rest import Client
+# from twilio.rest import Client
 
 
 @frappe.whitelist(allow_guest=True)
@@ -16,21 +16,20 @@ def send_otp(mobile_number):
 
     # Replace with your SMS API call here
     # ret = send_sms(mobile_number, f"Your OTP is {otp}")
+    # ret = send_sms_from_twilio(mobile_number, f"Your OTP is {otp}")
 
-    ret = send_sms_from_twilio(mobile_number, f"Your OTP is {otp}")
-
-    if ret :
-        doc = frappe.get_doc({
-            "doctype": "Mobile OTP Login",
-            "mobile_number": mobile_number,
-            "otp": otp,
-            "is_verified": 0,
-            "otp_expiry": expiry
-        })
-        doc.insert(ignore_permissions=True)
-        return {"status": "success", "message": "OTP sent"}
-    else :
-        return {"status": "failed", "message": "OTP not sent"}
+    # if ret :
+    doc = frappe.get_doc({
+        "doctype": "Mobile OTP Login",
+        "mobile_number": mobile_number,
+        "otp": otp,
+        "is_verified": 0,
+        "otp_expiry": expiry
+    })
+    doc.insert(ignore_permissions=True)
+    return {"status": "success", "message": "OTP sent"}
+    # else :
+    #     return {"status": "failed", "message": "OTP not sent"}
 
 
 # def send_sms(number, message):
@@ -38,18 +37,18 @@ def send_otp(mobile_number):
     # Replace this with real API call
 
 
-def send_sms_from_twilio(number, body) :
-    account_sid = frappe.db.get_single_value('Bottled Water Settings', 'account_sid')
-    auth_token = frappe.db.get_single_value('Bottled Water Settings', 'auth_token')
-    sender_number = frappe.db.get_single_value('Bottled Water Settings', 'twilio_phone_number')
-    client = Client(account_sid, auth_token)
+# def send_sms_from_twilio(number, body) :
+#     account_sid = frappe.db.get_single_value('Bottled Water Settings', 'account_sid')
+#     auth_token = frappe.db.get_single_value('Bottled Water Settings', 'auth_token')
+#     sender_number = frappe.db.get_single_value('Bottled Water Settings', 'twilio_phone_number')
+#     client = Client(account_sid, auth_token)
 
-    message = client.messages.create(
-                body = body ,
-                from_= sender_number ,
-                to=number
-              )
-    return message
+#     message = client.messages.create(
+#                 body = body ,
+#                 from_= sender_number ,
+#                 to=number
+#               )
+#     return message
 
 
 
@@ -283,6 +282,9 @@ def get_addresses() :
                 addresses.append(add_doc)
 
     return {'addresses' : addresses}
+
+
+
 
 
 

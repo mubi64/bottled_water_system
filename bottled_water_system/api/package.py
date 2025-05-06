@@ -1,6 +1,6 @@
 import frappe
 from datetime import date
-from bottled_water_system.api.common import get_customer
+from bottled_water_system.api.common import (get_customer, get_company_currency)
 from erpnext.controllers.accounts_controller import get_item_details
 
 
@@ -20,6 +20,9 @@ def get_packages():
         currency = frappe.db.get_value("Item Price", 
             {"item_code": package.get("item")}, 
             "currency")
+        
+        if not currency :
+            currency = get_company_currency()
 
         package["price"] = int(price) if price else 0
         package["currency"] = currency
@@ -109,8 +112,6 @@ def package_purchase(bottle_packages):
         for x in cust_pakage_purchase :
             frappe.db.set_value('Customer Package Purchase', x, 'sales_invoice', sales_invoice.name)
 
-
-
     return {'sales_invoice': sales_invoice.name}
 
 
@@ -136,6 +137,11 @@ def get_customer_package_purchases() :
 @frappe.whitelist()
 def get_water_bottle_product() :
     water_bottle_product_list = frappe.get_all('Water Bottle Product',fields=['*'])
+    company_currency = get_company_currency()
+    if water_bottle_product_list :
+        for row in water_bottle_product_list :
+            row['currency'] = company_currency
+
     return water_bottle_product_list
 
 

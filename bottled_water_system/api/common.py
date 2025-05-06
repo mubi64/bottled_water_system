@@ -29,6 +29,15 @@ def get_customer() :
 
 
 
+@frappe.whitelist()
+def get_company_currency() :
+    company = frappe.defaults.get_user_default("company")
+    if not company:
+        frappe.throw("No default company set for the current user.")
+
+    company_currency = frappe.db.get_value("Company", company, "default_currency") or "PKR"
+    return company_currency
+
 
 @frappe.whitelist()
 def get_customer_info() :
