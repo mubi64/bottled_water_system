@@ -2,7 +2,7 @@
 import frappe
 
 from bottled_water_system.api.common import get_customer
-
+from frappe.utils import flt
 
 
 @frappe.whitelist()
@@ -16,13 +16,13 @@ def place_water_order(package_name , bottle_quantity, delivery_date, address) :
     
     remaining_balance = frappe.db.get_value('Customer Package Purchase', package_name, 'bottles_remaining')
 
-    if remaining_balance < bottle_quantity :
+    if flt(remaining_balance) < flt(bottle_quantity) :
         return {'message':'Your remaining balance from package purchase is less than ordered quantity', 'status':'failed'}
 
 
     available = check_available_qty(customer, package_name)
 
-    if available["available_qty"] >= bottle_quantity :
+    if flt(available["available_qty"]) >= flt(bottle_quantity) :
         wo_doc = frappe.new_doc('Water Order')
         wo_doc.customer = customer
         wo_doc.address = address
@@ -50,9 +50,9 @@ def update_customer_package_purchase(self, bool) :
     prev_bottles_order = frappe.db.get_value('Customer Package Purchase', self.consumed_from, 'bottles_ordered')
     
     if bool == True :
-        bottles_order = prev_bottles_order + self.bottle_quantity
+        bottles_order = (prev_bottles_order or 0) + (self.bottle_quantity or 0)
     else :
-        bottles_order = prev_bottles_order - self.bottle_quantity
+        bottles_order = (prev_bottles_order or 0) - (self.bottle_quantity or 0)
 
     remaining_bottles = bottles_purchased - bottles_order
     
@@ -116,7 +116,7 @@ def water_order_delivery(water_order, delivered_quantity) :
 
     prev_delivered_quantity = frappe.db.get_value('Water Order', water_order, 'delivered_quantity')
     prev_outstanding_qty = frappe.db.get_value('Water Order', water_order, 'outstanding_quantity')
-    if prev_outstanding_qty < delivered_quantity :
+    if flt(prev_outstanding_qty) < flt(delivered_quantity) :
         return {'message':'Delivered quantity can not be greater than outstanding quantity' , 'status':'failed'}
 
     else :

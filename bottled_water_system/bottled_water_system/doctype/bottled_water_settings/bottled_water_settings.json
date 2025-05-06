@@ -16,7 +16,12 @@
   "column_break_zsck",
   "currency",
   "mode_of_payment_for_online_payment_section",
-  "mode_of_payment"
+  "mode_of_payment",
+  "twilio_settings_tab",
+  "account_sid",
+  "auth_token",
+  "column_break_jdrr",
+  "twilio_phone_number"
  ],
  "fields": [
   {
@@ -90,12 +95,36 @@
    "fieldtype": "Link",
    "label": "Currency",
    "options": "Currency"
+  },
+  {
+   "fieldname": "twilio_settings_tab",
+   "fieldtype": "Tab Break",
+   "label": "Twilio Settings"
+  },
+  {
+   "fieldname": "account_sid",
+   "fieldtype": "Data",
+   "label": "Account SID"
+  },
+  {
+   "fieldname": "auth_token",
+   "fieldtype": "Data",
+   "label": "Auth Token"
+  },
+  {
+   "fieldname": "column_break_jdrr",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "twilio_phone_number",
+   "fieldtype": "Phone",
+   "label": "Twilio Phone Number"
   }
  ],
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2025-04-30 12:37:41.090952",
+ "modified": "2025-05-06 11:43:34.918572",
  "modified_by": "Administrator",
  "module": "Bottled Water System",
  "name": "Bottled Water Settings",
