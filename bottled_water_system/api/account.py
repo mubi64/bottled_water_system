@@ -5,6 +5,7 @@ import requests
 import frappe
 from bottled_water_system.api.common import get_customer
 from frappe.utils import now_datetime, add_to_date
+from frappe.core.doctype.sms_settings.sms_settings import send_sms
 # from twilio.rest import Client
 
 
@@ -13,9 +14,10 @@ def send_otp(mobile_number):
     # return 1
     otp = str(random.randint(100000, 999999))
     expiry = add_to_date(now_datetime(), minutes=5)
+    receiver_list = [mobile_number]
 
     # Replace with your SMS API call here
-    # ret = send_sms(mobile_number, f"Your OTP is {otp}")
+    send_sms(receiver_list, f"Your OTP is {otp}", sender_name="")
     # ret = send_sms_from_twilio(mobile_number, f"Your OTP is {otp}")
 
     # if ret :
@@ -34,6 +36,7 @@ def send_otp(mobile_number):
 
 # def send_sms(number, message):
     # Example for UltraMsg or any other service
+
     # Replace this with real API call
 
 
