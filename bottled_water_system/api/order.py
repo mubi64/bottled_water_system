@@ -63,9 +63,9 @@ def update_customer_package_purchase(self, bool) :
     prev_bottles_order = frappe.db.get_value('Customer Package Purchase', self.consumed_from, 'bottles_ordered')
     
     if bool == True :
-        bottles_order = (prev_bottles_order or 0) + (self.bottle_quantity or 0)
+        bottles_order = flt(prev_bottles_order or 0) + flt(self.bottle_quantity or 0)
     else :
-        bottles_order = (prev_bottles_order or 0) - (self.bottle_quantity or 0)
+        bottles_order = flt(prev_bottles_order or 0) - flt(self.bottle_quantity or 0)
 
     remaining_bottles = bottles_purchased - bottles_order
     

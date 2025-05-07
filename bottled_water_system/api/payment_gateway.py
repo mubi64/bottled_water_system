@@ -52,7 +52,7 @@ def make_payment(card_number, exp_month, exp_year, cvc, is_bottle_rent, sales_in
         
         pe.insert(ignore_permissions=True)
 
-        return payment_confirm, pe
+        return payment_confirm
     else :
         return payment_confirm
 
