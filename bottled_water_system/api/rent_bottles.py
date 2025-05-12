@@ -1,6 +1,6 @@
 
 import frappe
-from frappe.utils import cint
+from frappe.utils import (cint, flt)
 
 from bottled_water_system.api.common import (get_customer, get_company_currency)
 
@@ -98,9 +98,9 @@ def get_security_deposit(water_bottle_product, quantity) :
 
 
 @frappe.whitelist()
-def bottle_return(water_order, bottle_returns) :
+def bottle_return(customer, water_order, bottle_returns) :
 
-    customer = get_customer()
+    # customer = get_customer()
 
     if bottle_returns :
         for row in bottle_returns :
@@ -116,6 +116,28 @@ def bottle_return(water_order, bottle_returns) :
 
     else :
         return {'message':"No Bottle Returns Found", 'status':'failed'}
+
+
+
+@frappe.whitelist()
+def get_security_return_list() :
+    customer = get_customer()
+    bottle_return_list = frappe.get_all('Bottle Return',
+                                filters = {
+                                             'customer' : customer ,
+                                             'with_security_return' : 1
+                                          },
+                                fields = ['water_bottle_product', 'quantity_returned', 'return_date', 'item', 'bottle_type', 'payment_entry']
+                          )
+    if bottle_return_list :
+        for row in bottle_return_list :
+            payment_entry_doc = frappe.get_doc('Payment Entry', row.payment_entry)
+            row['status'] = payment_entry_doc.status
+            row['amount'] = payment_entry_doc.paid_amount
+            row['currency'] = payment_entry_doc.paid_from_account_currency
+
+    return bottle_return_list
+
 
 
 
@@ -144,17 +166,9 @@ def update_customer_water_bottle_return(self) :
 
 
 @frappe.whitelist()
-def security_return(water_bottle_product, quantity) :
-    current_user = frappe.session.user
-    customer_list = frappe.db.sql("""
-        SELECT parent 
-        FROM `tabPortal User` 
-        WHERE user = %s
-        LIMIT 1
-    """, (current_user,), as_dict=True)
-    if not customer_list:
-        frappe.throw("No customer found for the current user.")
-    customer = customer_list[0].parent
+def security_return(customer, water_bottle_product, quantity) :
+    # customer = get_customer()
+    quantity = flt(quantity)
 
     botl_ret_doc = frappe.new_doc('Bottle Return')
     botl_ret_doc.customer = customer
@@ -215,7 +229,7 @@ def create_payment_entry(payment_type, mode_of_payment, customer, paid_amount, r
     elif payment_type == 'Pay' :
         pay_ent_doc.paid_from = acc_paid_to
     pay_ent_doc.insert(ignore_permissions=True)
-    pay_ent_doc.submit()
+    # pay_ent_doc.submit()
 
     # Switch back to original user
     frappe.set_user(current_user)

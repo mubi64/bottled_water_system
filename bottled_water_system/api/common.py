@@ -43,5 +43,7 @@ def get_company_currency() :
 def get_customer_info() :
     current_user = frappe.session.user
     usr_doc = frappe.get_doc('User',current_user)
-    return {'full_name':usr_doc.full_name, 'email':current_user, 'date_of_birth':usr_doc.birth_date, 'gender': usr_doc.gender, 'number':usr_doc.mobile_no }
+    has_delivery_role = any(role.role == "Water Delivery Boy" for role in usr_doc.roles)
+    return {'full_name':usr_doc.full_name, 'email':current_user, 'date_of_birth':usr_doc.birth_date, 'gender': usr_doc.gender, 'number':usr_doc.mobile_no,
+            'water_delivery_boy': has_delivery_role }
 

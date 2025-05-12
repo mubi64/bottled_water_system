@@ -18,7 +18,8 @@
   "order_date",
   "delivery_date",
   "remarks",
-  "address"
+  "address",
+  "assigned_to"
  ],
  "fields": [
   {
@@ -103,11 +104,18 @@
    "fieldtype": "Link",
    "label": "Address",
    "options": "Address"
+  },
+  {
+   "fieldname": "assigned_to",
+   "fieldtype": "Link",
+   "label": "Assigned To",
+   "link_filters": "[[\"User\",\"role\",\"=\",\"Water Delivery Boy\"]]",
+   "options": "User"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-05-05 11:07:07.195724",
+ "modified": "2025-05-12 17:09:55.902988",
  "modified_by": "Administrator",
  "module": "Bottled Water System",
  "name": "Water Order",

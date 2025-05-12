@@ -103,7 +103,7 @@ fixtures = [
 # ------------
 
 # before_install = "bottled_water_system.install.before_install"
-# after_install = "bottled_water_system.install.after_install"
+after_install = "bottled_water_system.api.after_install.create_role"
 
 # Uninstallation
 # ------------
