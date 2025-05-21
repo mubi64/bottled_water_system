@@ -10,7 +10,7 @@ stripe.api_key = frappe.db.get_single_value('Bottled Water Settings','secret_key
 
 
 @frappe.whitelist()
-def make_payment(card_number, exp_month, exp_year, cvc, is_bottle_rent, sales_invoice, customer_water_bottle) :
+def make_payment(token, is_bottle_rent, sales_invoice, customer_water_bottle) :
 
     
     amount = 0
@@ -33,7 +33,7 @@ def make_payment(card_number, exp_month, exp_year, cvc, is_bottle_rent, sales_in
                 currency = company_currency
 
     amount = int(amount * 100)
-    token = create_card_token(card_number, exp_month, exp_year, cvc)
+    # token = create_card_token(card_number, exp_month, exp_year, cvc)
     payment_method_id = create_payment_method(token)
     payment_intent_id = make_payment_intent(payment_method_id, amount, currency)
     payment_confirm = confirm_payment_intent(payment_intent_id, payment_method_id)
@@ -97,11 +97,18 @@ def create_payment_method(token) :
     return payment_method.id
 
 
+@frappe.whitelist()
+def create_client_secret(amount, currency) :
+    amount = int(amount)
+    payment_intent = stripe.PaymentIntent.create(
+                        amount = amount,
+                        currency = currency,
+                    )
+    return payment_intent.client_secret
 
 
 
 def make_payment_intent(payment_method_id, amount, currency) :
-
     payment_intent = stripe.PaymentIntent.create(
       amount=amount,
       currency=currency,
