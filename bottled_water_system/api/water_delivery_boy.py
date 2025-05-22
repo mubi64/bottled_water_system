@@ -27,6 +27,47 @@ def get_water_orders_for_delivery_boy() :
 
 
 
+
+@frappe.whitelist()
+def get_pending_water_orders_for_delivery_boy() :
+    current_user = frappe.session.user
+    water_order_list = frappe.get_all('Water Order',
+                            filters = {
+                                        'assigned_to' : current_user ,
+                                        'status' : ['NOT IN', ['Delivered', 'Cancelled'] ]
+                                      },
+                            fields = ['name', 'customer', 'bottle_quantity', 'delivered_quantity', 'outstanding_quantity', 'item', 'bottle_type', 'status', 'order_date', 'delivery_date', 'address']   
+                        )
+    if water_order_list :
+        for row in water_order_list :
+            add_doc = frappe.get_doc('Address', row.address)
+            row['latitude'] = add_doc.custom_latitude
+            row['longitude'] = add_doc.custom_longitude
+
+    return water_order_list
+
+
+@frappe.whitelist()
+def get_delivered_water_orders_for_delivery_boy() :
+    current_user = frappe.session.user
+    water_order_list = frappe.get_all('Water Order',
+                            filters = {
+                                        'assigned_to' : current_user ,
+                                        'status' : 'Delivered'
+                                      },
+                            fields = ['name', 'customer', 'bottle_quantity', 'delivered_quantity', 'outstanding_quantity', 'item', 'bottle_type', 'status', 'order_date', 'delivery_date', 'address']   
+                        )
+    if water_order_list :
+        for row in water_order_list :
+            add_doc = frappe.get_doc('Address', row.address)
+            row['latitude'] = add_doc.custom_latitude
+            row['longitude'] = add_doc.custom_longitude
+
+    return water_order_list
+
+
+
+
 @frappe.whitelist()
 def get_bottle_return_for_delivery_boy() :
     current_user = frappe.session.user
