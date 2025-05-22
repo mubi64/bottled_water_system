@@ -47,3 +47,13 @@ def get_customer_info() :
     return {'full_name':usr_doc.full_name, 'email':current_user, 'date_of_birth':usr_doc.birth_date, 'gender': usr_doc.gender, 'number':usr_doc.mobile_no,
             'water_delivery_boy': has_delivery_role }
 
+
+@frappe.whitelist()
+def get_item_image(item) :
+    image = frappe.db.get_value('Item', item, 'image')
+    return image
+
+
+
+
+

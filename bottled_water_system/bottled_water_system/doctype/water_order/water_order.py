@@ -20,14 +20,19 @@ class WaterOrder(Document):
 
     def before_save(self) :
         self.outstanding_quantity = flt(self.bottle_quantity) - flt(self.delivered_quantity)
+        set_water_order_status(self)
 
-        if self.status != 'Cancelled' :
-            if flt(self.delivered_quantity) == flt(0) :
-                self.status = 'Pending'
-            elif flt(self.delivered_quantity) > flt(0) and flt(self.delivered_quantity) < flt(self.bottle_quantity) :
-                self.status = 'Partially Delivered'
-            elif flt(self.delivered_quantity) == flt(self.bottle_quantity) :
-                self.status = 'Delivered'
+
+
+@frappe.whitelist()
+def set_water_order_status(self) :
+    if self.status != 'Cancelled' :
+        if flt(self.delivered_quantity) == flt(0) :
+            self.status = 'Pending'
+        elif flt(self.delivered_quantity) > flt(0) and flt(self.delivered_quantity) < flt(self.bottle_quantity) :
+            self.status = 'Partially Delivered'
+        elif flt(self.delivered_quantity) == flt(self.bottle_quantity) :
+            self.status = 'Delivered'
     
 		
         

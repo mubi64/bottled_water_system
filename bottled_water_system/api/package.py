@@ -1,6 +1,6 @@
 import frappe
 from datetime import date
-from bottled_water_system.api.common import (get_customer, get_company_currency)
+from bottled_water_system.api.common import (get_customer, get_company_currency, get_item_image)
 from erpnext.controllers.accounts_controller import get_item_details
 
 

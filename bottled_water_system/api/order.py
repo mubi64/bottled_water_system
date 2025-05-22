@@ -136,6 +136,7 @@ def water_order_delivery(water_order, delivered_quantity) :
         frappe.db.set_value('Water Order', water_order, 'delivered_quantity', prev_delivered_quantity + delivered_quantity)
         frappe.db.set_value('Water Order', water_order, 'outstanding_quantity', prev_outstanding_qty - delivered_quantity)
         water_order_doc = frappe.get_doc('Water Order', water_order)
+        set_water_order_status(water_order_doc)
         update_bottle_ledger_on_delivery(water_order_doc)
 
         return {'message':'Water Order Updated' , 'status':'success'}
@@ -167,6 +168,20 @@ def update_bottle_ledger_on_delivery(water_order_doc) :
 
 
 
+@frappe.whitelist()
+def set_water_order_status(self) :
+    if self.status != 'Cancelled' :
+        if flt(self.delivered_quantity) == flt(0) :
+            self.status = 'Pending'
+        elif flt(self.delivered_quantity) > flt(0) and flt(self.delivered_quantity) < flt(self.bottle_quantity) :
+            self.status = 'Partially Delivered'
+        elif flt(self.delivered_quantity) == flt(self.bottle_quantity) :
+            self.status = 'Delivered'
+        self.save(ignore_permissions=True)
+
+
+
+    
 
 
 

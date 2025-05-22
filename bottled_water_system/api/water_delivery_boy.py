@@ -26,8 +26,6 @@ def get_water_orders_for_delivery_boy() :
     return water_order_list
 
 
-
-
 @frappe.whitelist()
 def get_pending_water_orders_for_delivery_boy() :
     current_user = frappe.session.user

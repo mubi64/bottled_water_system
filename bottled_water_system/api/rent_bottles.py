@@ -2,7 +2,7 @@
 import frappe
 from frappe.utils import (cint, flt)
 
-from bottled_water_system.api.common import (get_customer, get_company_currency)
+from bottled_water_system.api.common import (get_customer, get_company_currency, get_item_image)
 
 
 @frappe.whitelist(allow_guest=True)
@@ -254,6 +254,7 @@ def get_customer_water_bottle() :
             water_bottle_product_doc = frappe.get_doc('Water Bottle Product', row.water_bottle_product)
             row['bottle_type'] = water_bottle_product_doc.bottle_type
             row['item'] = water_bottle_product_doc.item
+            row['image'] = get_item_image(water_bottle_product_doc.item)
             row['price'] = water_bottle_product_doc.price
             row['currency'] = get_company_currency()
 
