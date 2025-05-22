@@ -15,7 +15,7 @@ def get_water_orders_for_delivery_boy() :
                             filters = {
                                         'assigned_to' : current_user
                                       },
-                            fields = ['customer', 'bottle_quantity', 'delivered_quantity', 'outstanding_quantity', 'item', 'bottle_type', 'status', 'order_date', 'delivery_date', 'address']   
+                            fields = ['name', 'customer', 'bottle_quantity', 'delivered_quantity', 'outstanding_quantity', 'item', 'bottle_type', 'status', 'order_date', 'delivery_date', 'address']   
                         )
     if water_order_list :
         for row in water_order_list :
@@ -30,19 +30,22 @@ def get_water_orders_for_delivery_boy() :
 @frappe.whitelist()
 def get_bottle_return_for_delivery_boy() :
     current_user = frappe.session.user
+    frappe.set_user('Administrator')
     bottle_retun_list = frappe.get_all('Bottle Return', 
                                 filters = {
                                             'owner' : current_user
                                           },
-                                fields = ['customer', 'water_bottle_product', 'item', 'bottle_type', 'return_date', 'quantity_returned', 'with_security_return', 'payment_entry']
+                                fields = ['name', 'customer', 'water_bottle_product', 'item', 'bottle_type', 'return_date', 'quantity_returned', 'with_security_return', 'payment_entry']
                         )
     if bottle_retun_list :
         for row in bottle_retun_list :
             if row.payment_entry :
-                payment_entry_doc = frappe.get_doc('Bottle Return', row.payment_entry)
+                payment_entry_doc = frappe.get_doc('Payment Entry', row.payment_entry)
                 row['status'] = payment_entry_doc.status
                 row['amount'] = payment_entry_doc.paid_amount
                 row['currency'] = payment_entry_doc.paid_from_account_currency
+    
+    frappe.set_user(current_user)
 
     return bottle_retun_list
 
