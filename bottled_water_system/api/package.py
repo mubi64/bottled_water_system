@@ -129,6 +129,10 @@ def get_customer_package_purchases() :
                                                  fields = ['*']
                                                  )
     if cust_package_purchases_list :
+        for row in cust_package_purchases_list :
+            row['image'] = get_item_image(row.item)
+
+
         return cust_package_purchases_list
 
 
@@ -141,6 +145,7 @@ def get_water_bottle_product() :
     if water_bottle_product_list :
         for row in water_bottle_product_list :
             row['currency'] = company_currency
+            row['image'] = get_item_image(row.item)
 
     return water_bottle_product_list
 

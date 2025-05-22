@@ -1,7 +1,7 @@
 
 import frappe
 
-from bottled_water_system.api.common import get_customer
+from bottled_water_system.api.common import (get_customer, get_item_image)
 from frappe.utils import flt
 
 
@@ -53,6 +53,10 @@ def get_customer_water_order() :
                                     },
                                     fields = ['*']
                                 )
+    if water_order_list :
+        for row in water_order_list :
+            row['image'] = get_item_image(row.item)
+
     return water_order_list
 
 

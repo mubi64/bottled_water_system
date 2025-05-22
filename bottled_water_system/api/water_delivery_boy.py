@@ -2,9 +2,7 @@
 
 
 import frappe
-from bottled_water_system.api.common import get_customer
-
-
+from bottled_water_system.api.common import (get_customer, get_item_image)
 
 
 
@@ -20,6 +18,7 @@ def get_water_orders_for_delivery_boy() :
     if water_order_list :
         for row in water_order_list :
             add_doc = frappe.get_doc('Address', row.address)
+            row['image'] = get_item_image(row.item)
             row['latitude'] = add_doc.custom_latitude
             row['longitude'] = add_doc.custom_longitude
 
@@ -39,6 +38,7 @@ def get_pending_water_orders_for_delivery_boy() :
     if water_order_list :
         for row in water_order_list :
             add_doc = frappe.get_doc('Address', row.address)
+            row['image'] = get_item_image(row.item)
             row['latitude'] = add_doc.custom_latitude
             row['longitude'] = add_doc.custom_longitude
 
@@ -58,11 +58,11 @@ def get_delivered_water_orders_for_delivery_boy() :
     if water_order_list :
         for row in water_order_list :
             add_doc = frappe.get_doc('Address', row.address)
+            row['image'] = get_item_image(row.item)
             row['latitude'] = add_doc.custom_latitude
             row['longitude'] = add_doc.custom_longitude
 
     return water_order_list
-
 
 
 
@@ -78,6 +78,7 @@ def get_bottle_return_for_delivery_boy() :
                         )
     if bottle_retun_list :
         for row in bottle_retun_list :
+            row['image'] = get_item_image(row.item)
             if row.payment_entry :
                 payment_entry_doc = frappe.get_doc('Payment Entry', row.payment_entry)
                 row['status'] = payment_entry_doc.status
@@ -87,6 +88,7 @@ def get_bottle_return_for_delivery_boy() :
     frappe.set_user(current_user)
 
     return bottle_retun_list
+
 
 
 
